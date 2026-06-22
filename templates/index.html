@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIVA - Autonomous Android Voice Assistant Console</title>
+    <meta name="description" content="Control, test, and train AIVA—your personal AI assistant for Android. Manage custom voice actions, device settings, and speech intelligence dynamically.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div id="bg-glow-1"></div>
+    <div id="bg-glow-2"></div>
+
+    <div id="app-container">
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar">
+            <div id="brand-header">
+                <i class="fa-solid fa-robot" id="logo-icon"></i>
+                <h1>AIVA</h1>
+                <span id="version-badge">v2.1 (Simulated)</span>
+            </div>
+            
+            <nav id="nav-tabs">
+                <button class="nav-btn active" id="btn-tab-chat" onclick="switchTab('chat')">
+                    <i class="fa-solid fa-comment-dots"></i> Assistant Chat
+                </button>
+                <button class="nav-btn" id="btn-tab-settings" onclick="switchTab('settings')">
+                    <i class="fa-solid fa-sliders"></i> Device Control
+                </button>
+                <button class="nav-btn" id="btn-tab-training" onclick="switchTab('training')">
+                    <i class="fa-solid fa-graduation-cap"></i> Training Center
+                </button>
+            </nav>
+
+            <div id="sidebar-footer">
+                <div id="tts-settings">
+                    <label for="select-voice">Voice Output:</label>
+                    <select id="select-voice">
+                        <option value="none">Browser Default</option>
+                    </select>
+                    <div class="toggle-container">
+                        <label class="switch">
+                            <input type="checkbox" id="chk-speech-output" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="toggle-label">Read Replies Aloud</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- HEADER -->
+            <header id="content-header">
+                <div id="header-text">
+                    <h2 id="current-tab-title">Assistant Chat</h2>
+                    <p id="current-tab-desc">Interact with AIVA using speech-to-text or typed console commands.</p>
+                </div>
+                <div id="device-pill">
+                    <span id="badge-device-status"><i class="fa-solid fa-circle" id="status-dot"></i> Connected</span>
+                </div>
+            </header>
+
+            <!-- TAB: CHAT -->
+            <section id="tab-content-chat" class="tab-pane active">
+                <div id="chat-layout">
+                    <!-- Glassmorphic Phone Viewport -->
+                    <div id="phone-frame">
+                        <div id="phone-notch"></div>
+                        
+                        <!-- Phone Status Bar -->
+                        <div id="phone-status-bar">
+                            <span id="phone-time">15:15</span>
+                            <div id="phone-status-icons">
+                                <i class="fa-solid fa-wifi" id="phone-icon-wifi" title="Wi-Fi Status"></i>
+                                <i class="fa-solid fa-bluetooth" id="phone-icon-bt" title="Bluetooth Status"></i>
+                                <i class="fa-solid fa-bolt" id="phone-icon-flashlight" style="display:none;" title="Flashlight Status"></i>
+                                <i class="fa-solid fa-battery-three-quarters"></i>
+                            </div>
+                        </div>
+
+                        <!-- Chat messages display -->
+                        <div id="chat-messages-container">
+                            <div class="message assistant-msg">
+                                <div class="msg-bubble">
+                                    Hello! I am AIVA, your personal AI assistant. Click the microphone or type below to talk to me, or say "turn on wifi", "call Mom" or "train my favorite color is blue"!
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive listening overlay -->
+                        <div id="mic-overlay">
+                            <div id="mic-overlay-glow"></div>
+                            <i class="fa-solid fa-microphone" id="mic-overlay-icon"></i>
+                            <p id="mic-overlay-status">Listening...</p>
+                        </div>
+
+                        <!-- Flashlight simulation beam -->
+                        <div id="flashlight-beam"></div>
+                    </div>
+
+                    <!-- Chat controls panel -->
+                    <div id="chat-controls-pane">
+                        <div id="speech-recognition-log">
+                            <h3>Voice Command Center</h3>
+                            <p>Press the microphone button, grant audio permissions, and speak. Chrome or Edge recommended for speech-to-text support.</p>
+                        </div>
+
+                        <div id="input-bar">
+                            <button id="btn-mic-toggle" class="control-btn" title="Click to talk (Speech Recognition)">
+                                <i class="fa-solid fa-microphone" id="mic-icon"></i>
+                            </button>
+                            <input type="text" id="input-command-text" placeholder="Type a command or ask a question..." autocomplete="off">
+                            <button id="btn-send-command" class="control-btn" title="Send command">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB: SIMULATED SETTINGS -->
+            <section id="tab-content-settings" class="tab-pane">
+                <div class="settings-grid">
+                    <!-- Toggle Controls Card -->
+                    <div class="settings-card">
+                        <h3><i class="fa-solid fa-toggle-on"></i> Device Hardware</h3>
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <span class="setting-title">Wi-Fi Wireless Connection</span>
+                                <span class="setting-subtitle" id="val-wifi">ON</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="switch-wifi" onchange="toggleState('wifi')">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <span class="setting-title">Bluetooth Connection</span>
+                                <span class="setting-subtitle" id="val-bluetooth">OFF</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="switch-bluetooth" onchange="toggleState('bluetooth')">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <span class="setting-title">Flashlight / Torch</span>
+                                <span class="setting-subtitle" id="val-flashlight">OFF</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="switch-flashlight" onchange="toggleState('flashlight')">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Range Controls Card -->
+                    <div class="settings-card">
+                        <h3><i class="fa-solid fa-sliders"></i> Hardware Levels</h3>
+                        <div class="slider-group">
+                            <div class="slider-info">
+                                <span>Volume Level</span>
+                                <span id="label-volume">80%</span>
+                            </div>
+                            <input type="range" id="slider-volume" min="0" max="100" value="80" oninput="updateLevel('volume', this.value)">
+                        </div>
+                        <div class="slider-group">
+                            <div class="slider-info">
+                                <span>Screen Brightness</span>
+                                <span id="label-brightness">70%</span>
+                            </div>
+                            <input type="range" id="slider-brightness" min="0" max="100" value="70" oninput="updateLevel('brightness', this.value)">
+                        </div>
+                    </div>
+
+                    <!-- Notification Spawner Card -->
+                    <div class="settings-card">
+                        <h3><i class="fa-solid fa-bell"></i> Incoming Notifications</h3>
+                        <p class="card-desc">Simulate an incoming message on the device to test AIVA's reading capabilities.</p>
+                        <form id="form-spawn-notification" onsubmit="spawnNotification(event)">
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <label for="select-notif-app">App</label>
+                                    <select id="select-notif-app">
+                                        <option value="WhatsApp">WhatsApp</option>
+                                        <option value="Phone">Phone</option>
+                                        <option value="System">System</option>
+                                    </select>
+                                </div>
+                                <div class="form-col">
+                                    <label for="input-notif-from">Sender</label>
+                                    <input type="text" id="input-notif-from" value="Rahul" required>
+                                </div>
+                            </div>
+                            <div class="form-row" style="margin-top: 10px;">
+                                <div class="form-col" style="flex: 1;">
+                                    <label for="input-notif-msg">Message Content</label>
+                                    <input type="text" id="input-notif-msg" value="I will arrive at 5 PM" required autocomplete="off">
+                                </div>
+                            </div>
+                            <button type="submit" id="btn-spawn" class="action-btn-primary">
+                                <i class="fa-solid fa-plus"></i> Spawn Simulated Alert
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Android Activity Log Card -->
+                    <div class="settings-card" id="log-card">
+                        <div class="card-header-row">
+                            <h3><i class="fa-solid fa-list-check"></i> Assistant Activity Log</h3>
+                            <button id="btn-clear-logs" onclick="clearLogs()" class="action-btn-text">Clear</button>
+                        </div>
+                        <div id="activity-log-display">
+                            <div class="log-entry system-entry">System loaded. Ready for commands.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB: TRAINING CENTER -->
+            <section id="tab-content-training" class="tab-pane">
+                <div class="training-layout">
+                    <!-- Column 1: Q&A Knowledge Base -->
+                    <div class="training-card">
+                        <h3><i class="fa-solid fa-brain"></i> Q&A Knowledge Base</h3>
+                        <p class="card-desc">Add questions that AIVA will answer directly using matching rules.</p>
+                        
+                        <form id="form-add-knowledge" onsubmit="addKnowledge(event)">
+                            <div class="form-row">
+                                <input type="text" id="input-kb-q" placeholder="E.g., What is your favorite food" required autocomplete="off">
+                                <input type="text" id="input-kb-a" placeholder="E.g., I love pizza" required autocomplete="off">
+                                <button type="submit" class="action-btn-primary" id="btn-add-kb">Add</button>
+                            </div>
+                        </form>
+
+                        <div class="trained-list-container">
+                            <table class="trained-table" id="table-knowledge">
+                                <thead>
+                                    <tr>
+                                        <th>Question / Phrase</th>
+                                        <th>Response Answer</th>
+                                        <th style="width: 50px;">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="list-kb-tbody">
+                                    <!-- Knowledge items loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Custom Commands Mapping -->
+                    <div class="training-card">
+                        <h3><i class="fa-solid fa-code"></i> Custom Command Shortcuts</h3>
+                        <p class="card-desc">Map custom voice commands to open URLs, files, or run system actions.</p>
+                        
+                        <form id="form-add-command" onsubmit="addCommand(event)">
+                            <div class="form-row">
+                                <input type="text" id="input-cmd-phrase" placeholder="E.g., search code" required autocomplete="off">
+                                <input type="text" id="input-cmd-action" placeholder="E.g., https://github.com or calc" required autocomplete="off">
+                                <button type="submit" class="action-btn-primary" id="btn-add-cmd">Add</button>
+                            </div>
+                        </form>
+
+                        <div class="trained-list-container">
+                            <table class="trained-table" id="table-commands">
+                                <thead>
+                                    <tr>
+                                        <th>Trigger Phrase</th>
+                                        <th>Target Action</th>
+                                        <th style="width: 50px;">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="list-cmd-tbody">
+                                    <!-- Command items loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

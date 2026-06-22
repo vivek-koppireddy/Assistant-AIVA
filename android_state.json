@@ -1,0 +1,27 @@
+{
+    "wifi": "ON",
+    "bluetooth": "OFF",
+    "flashlight": "OFF",
+    "brightness": "70%",
+    "volume": "80%",
+    "notifications": [
+        {
+            "from": "Rahul",
+            "app": "WhatsApp",
+            "message": "I will arrive at 5 PM"
+        },
+        {
+            "from": "Mom",
+            "app": "Phone",
+            "message": "Missed call from Mom"
+        },
+        {
+            "from": "Calendar",
+            "app": "System",
+            "message": "Team Sync in 15 mins"
+        }
+    ],
+    "logs": [
+        "[2026-06-19 15:29:53] Simulated Android: Wi-Fi turned ON"
+    ]
+}
